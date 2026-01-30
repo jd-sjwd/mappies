@@ -1,0 +1,52 @@
++------------------------------------------------------+
+|                    Users / Clients                   |
+|         (GPT Action, ArcGisPro Python Notebook)      |
++---------------------------+--------------------------+
+                            |
+                            | HTTPS (443)
+                            v
++------------------------------------------------------+
+|                        NGINX                         |
+|                                                      |
+|  - TLS termination (Let's Encrypt)                   |
+|  - Reverse proxy                                     |
+|  - Security headers                                  |
+|                                                      |
+|  https://yoursub.yourdomain.whatever                 |
++---------------------------+--------------------------+
+                            |
+                            | HTTP (localhost)
+                            | 127.0.0.1:8000
+                            v
++------------------------------------------------------+
+|                Gunicorn (systemd)                    |
+|                                                      |
+|  - Managed by systemd                                |
+|  - Auto-restart on failure                           |
+|  - Binds to localhost only                           |
+|                                                      |
+|  gunicorn app:app                                    |
++---------------------------+--------------------------+
+                            |
+                            v
++------------------------------------------------------+
+|                  Flask Application                   |
+|                    (MapsAI API)                      |
+|                                                      |
+|  - Deterministic GIS endpoints                       |
+|  - Health checks                                     |
+|  - No direct TLS handling                            |
+|                                                      |
+|  app.py                                              |
++---------------------------+--------------------------+
+                            |
+            +---------------+----------------+
+            |                                |
+            v                                v
++---------------------------+   +---------------------------+
+|     ArcGIS Online         |   |        OpenAI API         |
+|                           |   |                           |
+|  - Feature Layers         |   |  - Intent routing (opt.)   
+|  - Spatial queries        |   |  - NLP support            |
+|                           |   |                           |
++---------------------------+   +---------------------------+
